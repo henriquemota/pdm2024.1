@@ -1,15 +1,18 @@
-import Principal from './src/views/principal'
+import { View } from 'react-native'
+import { Header, List, Search } from './src/components'
+import { data1, data2, img } from './src/data'
 
-// #F5F5F5 cinza
-// #BA4DE3 roxo claro
-// #8A05BE roxo medio
-// #530082 roxo escuro
-// #191919 preto
 
 
 export default function App() {
-
   return (
-    <Principal />
+    <View>
+      <Header nome='Henrique Mota' imagem={img} />
+      <Search />
+      <List data={[...data2, ...data2]} horizontal />
+      <List data={data1} />
+    </View>
   )
 }
+
+

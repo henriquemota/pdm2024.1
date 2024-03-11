@@ -1,28 +1,33 @@
 import { Image, StyleSheet, Text, View } from 'react-native'
+import logo from '../assets/logo.png'
 
-function Header({ title = '', image = null }) {
-  const style = StyleSheet.create({
+function Header({ nome = 'Nome nao informado', imagem = null }) {
+  const styles = StyleSheet.create({
     container: {
       flexDirection: 'row',
-      alignItems: 'center',
       justifyContent: 'space-between',
-      backgroundColor: '#530082',
-      padding: 8,
-      paddingHorizontal: 32
+      alignItems: 'center',
+      padding: 16,
+      paddingTop: 32,
+      backgroundColor: '#c3c3c3',
     },
     text: {
-      color: '#ffffff',
       fontSize: 16,
       fontWeight: 'bold',
-    }
+      color: '#231f20'
+    },
+    image: {
+      height: 80,
+      width: 80,
+    },
   })
+
   return (
-    <View style={style.container}>
-      <Text style={style.text}>{title}</Text>
-      <Image source={image} />
+    <View style={styles.container}>
+      <Text style={styles.text}>{nome}</Text>
+      <Image style={styles.image} source={logo} />
     </View>
   )
 }
 
 export { Header }
-
