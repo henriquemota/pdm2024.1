@@ -2,35 +2,37 @@ import { StyleSheet, View } from 'react-native'
 
 export default function App() {
 
-
   const styles = StyleSheet.create({
     container: {
       flex: 1,
-      backgroundColor: '#ccc',
+      backgroundColor: '#333333',
+      flexDirection: 'row',
       justifyContent: 'center',
       alignItems: 'center',
+      gap: 16,
+      flexWrap: 'wrap',
     },
-    botao: {
+    dimensao: {
       height: 80,
       width: 80,
-      margin: 4
+      borderRadius: 40,
     },
-    botaoAzul: {
-      backgroundColor: '#0000ff',
+    containerAzul: {
+      backgroundColor: '#0000ff'
     },
-    botaoVerde: {
+    containerVerde: {
       backgroundColor: '#00ff00'
     },
-    botaoVermelho: {
+    containerVermelho: {
       backgroundColor: '#ff0000'
     },
   })
 
   return (
     <View style={styles.container}>
-      <View style={[styles.botao, styles.botaoAzul]}></View>
-      <View style={[styles.botao, styles.botaoVerde]}></View>
-      <View style={[styles.botao, styles.botaoVermelho]}></View>
-    </View >
+      <View style={[styles.containerAzul, styles.dimensao]}></View>
+      <View style={[styles.containerVerde, styles.dimensao]}></View>
+      <View style={[styles.containerVermelho, styles.dimensao]}></View>
+    </View>
   )
 }

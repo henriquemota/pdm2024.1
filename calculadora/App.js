@@ -1,88 +1,81 @@
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
-
 export default function App() {
+  const botoes = []
+  for (let i = 9; i >= 0; i--) botoes.push(i)
+  botoes.push('CE')
+  botoes.push('=')
+  const operadores = ['+', '-', '*', '/']
 
-  function handleButton(button) {
-    console.log(button)
-  }
-
-  // cria os estilos 
-  const styles = StyleSheet.create({
+  const estilos = StyleSheet.create({
     container: {
       flex: 1,
-      paddingVertical: 16,
       backgroundColor: '#555',
     },
     input: {
-      backgroundColor: 'rgba(255,255,255,0.4)',
-      margin: 16,
-      padding: 16,
-      borderRadius: 4,
+      padding: 32,
       fontSize: 32,
+      backgroundColor: 'rgba(255,255,255,0.6)',
+      borderRadius: 8,
+      marginHorizontal: 8,
+      marginTop: 32,
+      marginBottom: 32,
     },
-    containerGeral: {
+    teclado: {
       flexDirection: 'row',
-      margin: 16,
     },
     containerBotoes: {
       flex: 1,
       flexDirection: 'row',
       flexWrap: 'wrap',
-      alignItems: 'center',
-      gap: 4,
+      justifyContent: 'center',
+      gap: 8,
     },
     containerOperadores: {
-      alignItems: 'center',
-      width: 80,
-      gap: 4,
-    },
-    button: {
-      backgroundColor: '#c3c3c3',
-      height: 80,
-      width: 80,
-      borderRadius: 8,
+      width: 120,
+      flexDirection: 'row',
+      flexWrap: 'wrap',
       justifyContent: 'center',
-      alignItems: 'center',
+      gap: 8,
     },
-    text: {
-      fontSize: 32,
-      fontWeight: 'bold'
+    botao: {
+      width: 80,
+      height: 80,
+      borderRadius: 40,
+      backgroundColor: 'rgba(255,255,255,0.6)',
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+    textoBotao: {
+      fontWeight: 'bold',
+      fontSize: 32
     },
 
   })
 
-  // cria o array de botoes 
-  const botoes = []
-  for (let i = 9; i >= 0; i--) botoes.push(i)
-  botoes.push('CE')
-  botoes.push('=')
-  // cria o array de operadores
-  const operadores = ['+', '-', '*', '/']
+  function handleButton(e) {
+  }
+
 
   return (
-    <View style={styles.container}>
-      <TextInput style={styles.input} />
-      <View style={styles.containerGeral}>
-        <View style={styles.containerBotoes}>
+    <View style={estilos.container}>
+      <TextInput style={estilos.input} />
+      <View style={estilos.teclado}>
+        <View style={estilos.containerBotoes}>
           {botoes.map((el, ix) =>
             <TouchableOpacity
               key={ix}
-              style={styles.button}
+              style={estilos.botao}
               onPress={() => handleButton(el)}
             >
-              <Text style={styles.text}>{el}</Text>
+              <Text style={estilos.textoBotao}>{el}</Text>
             </TouchableOpacity>
           )}
         </View>
-        <View style={styles.containerOperadores}>
+        <View style={estilos.containerOperadores}>
           {operadores.map((el, ix) =>
-            <TouchableOpacity
-              key={ix}
-              style={styles.button}
-              onPress={() => handleButton(el)}
-            >
-              <Text style={styles.text}>{el}</Text>
+            <TouchableOpacity key={ix} style={estilos.botao}>
+              <Text style={estilos.textoBotao}>{el}</Text>
             </TouchableOpacity>
           )}
         </View>
@@ -90,4 +83,3 @@ export default function App() {
     </View>
   )
 }
-
