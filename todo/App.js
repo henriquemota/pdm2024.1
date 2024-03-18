@@ -81,12 +81,22 @@ export default function App() {
   function handleSave() {
     const localdata = [...data]
     localdata.push({
-      id: localdata.length + 1,
+      id: Math.ceil(Math.random() * 10000),
       task: texto,
       finished: false,
     })
     setData(localdata)
     setTexto('')
+  }
+  function handleDelete(id) {
+    const localdata = data.filter(e => Number(e.id) !== Number(id))
+    setData(localdata)
+  }
+  function handleCheck(id) {
+    const localdata = [...data]
+    const index = localdata.findIndex(e => Number(e.id) === Number(id))
+    localdata[index].finished = true
+    setData(localdata)
   }
 
   return (
@@ -114,12 +124,20 @@ export default function App() {
             <Text style={[styles.itemText, el.finished ? styles.itemTextFinished : null]}>{el.id}</Text>
             <Text style={[styles.itemText, el.finished ? styles.itemTextFinished : null, { flex: 1 }]}>{el.task}</Text>
             <View style={styles.containerItemsButtons}>
-              <TouchableOpacity style={styles.itemButton}>
+              <TouchableOpacity
+                style={styles.itemButton}
+                onPress={() => handleDelete(el.id)}
+              >
                 <Feather name='delete' style={styles.itemText} />
               </TouchableOpacity>
-              <TouchableOpacity style={styles.itemButton}>
-                <Feather name='check' style={styles.itemText} />
-              </TouchableOpacity>
+              {!el.finished &&
+                <TouchableOpacity
+                  style={styles.itemButton}
+                  onPress={() => handleCheck(el.id)}
+                >
+                  <Feather name='check' style={styles.itemText} />
+                </TouchableOpacity>
+              }
             </View>
           </View>
         )}
