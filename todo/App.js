@@ -2,146 +2,134 @@ import { Feather } from '@expo/vector-icons'
 import { useState } from 'react'
 import { ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
-export default function App() {
-  const [texto, setTexto] = useState('')
+const App = () => {
+  const [task, setTask] = useState('')
   const [data, setData] = useState([])
 
   const styles = StyleSheet.create({
     container: {
       flex: 1,
+      backgroundColor: '#30D9C8',
       padding: 8,
-      paddingVertical: 32,
-      backgroundColor: '#012E40',
+      paddingVertical: 24,
     },
     title: {
+      color: '#2128A6',
       fontSize: 24,
-      fontWeight: 'bold',
-      color: '#fff'
+      fontWeight: 'bold'
     },
-    containerInput: {
+    row: {
       flexDirection: 'row',
       alignItems: 'center',
-      gap: 8,
+      gap: 4,
+      marginVertical: 8
     },
     input: {
-      flex: 1,
-      height: 64,
-      backgroundColor: 'rgba(255, 255, 255, 0.5)',
-      padding: 16,
-      borderWidth: 1,
-      borderRadius: 4,
-      borderColor: '#fff',
-      marginVertical: 8,
-      fontSize: 24,
-    },
-    button: {
       padding: 8,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderWidth: 1,
-      borderRadius: 8,
-      borderColor: '#fff',
-      height: 64,
-      width: 64,
+      borderWidth: 2,
+      borderColor: '#DCE0F2',
+      backgroundColor: 'rgba(33,40,166,0.2)',
+      flex: 1,
+      fontSize: 16,
     },
-    buttonText: {
-      color: '#fff',
-    },
-    containerItems: {
+    itemRow: {
       flexDirection: 'row',
-      alignItems: 'center',
-      gap: 8,
-    },
-    containerItemsButtons: {
-      flexDirection: 'row',
+      flexWrap: 'wrap',
       alignItems: 'center',
       gap: 2,
+      marginVertical: 8,
+      paddingBottom: 4,
+      borderBottomWidth: 2,
+      borderBottomColor: '#DCE0F2',
+      borderStyle: 'dotted'
     },
-    itemButton: {
-      padding: 4,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderWidth: 1,
-      borderRadius: 2,
-      borderColor: '#fff',
-      height: 32,
-      width: 32,
+    itemLabel: {
+      flex: 1,
+      fontSize: 16,
     },
-    itemText: {
-      color: '#fff',
-      fontSize: 18,
-    },
-    itemTextFinished: {
+    itemLabelFinished: {
       textDecorationLine: 'line-through',
-      color: '#888'
+      color: '#ff0000',
     },
-
   })
 
-  function handleSave() {
+  const handleSave = () => {
     const localdata = [...data]
-    localdata.push({
-      id: Math.ceil(Math.random() * 10000),
-      task: texto,
-      finished: false,
-    })
+    const obj = { id: Math.ceil(Math.random() * 100000), task: task, finished: false }
+    localdata.push(obj)
     setData(localdata)
-    setTexto('')
+    setTask('')
   }
-  function handleDelete(id) {
-    const localdata = data.filter(e => Number(e.id) !== Number(id))
+  const handleDelete = (id) => {
+    const localdata = data.filter(m => Number(m.id) !== Number(id))
     setData(localdata)
   }
-  function handleCheck(id) {
+  const handleCheck = (id) => {
     const localdata = [...data]
-    const index = localdata.findIndex(e => Number(e.id) === Number(id))
+    const index = localdata.findIndex(m => Number(m.id) === Number(id))
     localdata[index].finished = true
     setData(localdata)
   }
 
   return (
     <View style={styles.container}>
-      <View>
-        <Text style={styles.title}>Todo APP</Text>
-        <View style={styles.containerInput}>
-          <TextInput
-            style={styles.input}
-            placeholder='informe a atividade'
-            onChangeText={setTexto}
-            value={texto}
-          />
-          <TouchableOpacity
-            style={styles.button}
-            onPress={handleSave}
-          >
-            <Feather name='save' size={24} style={styles.buttonText} />
-          </TouchableOpacity>
-        </View>
+      <Text style={styles.title}>Todo APP</Text>
+      <View style={styles.row}>
+        <TextInput
+          style={styles.input}
+          value={task}
+          onChangeText={setTask}
+        />
+        <Button
+          icon='save'
+          onPress={handleSave}
+        />
       </View>
-      <ScrollView style={{ marginTop: 16 }}>
+      <ScrollView>
         {data.map((el, ix) =>
-          <View key={ix} style={styles.containerItems}>
-            <Text style={[styles.itemText, el.finished ? styles.itemTextFinished : null]}>{el.id}</Text>
-            <Text style={[styles.itemText, el.finished ? styles.itemTextFinished : null, { flex: 1 }]}>{el.task}</Text>
-            <View style={styles.containerItemsButtons}>
-              <TouchableOpacity
-                style={styles.itemButton}
-                onPress={() => handleDelete(el.id)}
-              >
-                <Feather name='delete' style={styles.itemText} />
-              </TouchableOpacity>
-              {!el.finished &&
-                <TouchableOpacity
-                  style={styles.itemButton}
-                  onPress={() => handleCheck(el.id)}
-                >
-                  <Feather name='check' style={styles.itemText} />
-                </TouchableOpacity>
-              }
-            </View>
+          <View key={ix} style={styles.itemRow}>
+            <Text
+              style={[styles.itemLabel, el.finished ? styles.itemLabelFinished : null]}
+            >{el?.task}</Text>
+            <Button
+              icon='delete'
+              onPress={() => handleDelete(el.id)}
+            />
+            {!el.finished &&
+              <Button
+                icon='check-square'
+                onPress={() => handleCheck(el.id)}
+              />
+            }
           </View>
         )}
       </ScrollView>
     </View>
   )
 }
+
+const Button = ({ icon = '', size = 24, onPress = null }) => {
+  const styles = StyleSheet.create({
+    button: {
+      borderWidth: 2,
+      borderColor: '#6F73BF',
+      padding: 8,
+      borderRadius: 4,
+      backgroundColor: '#DCE0F2',
+    },
+    buttonText: {
+      color: '#6F73BF',
+    },
+  })
+
+  return (
+    <TouchableOpacity
+      style={styles.button}
+      onPress={onPress}
+    >
+      <Feather name={icon} size={size} style={styles.buttonText} />
+    </TouchableOpacity>
+  )
+}
+
+export default App
