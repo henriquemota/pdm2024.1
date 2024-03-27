@@ -1,6 +1,11 @@
+import { useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 export default function App() {
+  const [memoria, setMemoria] = useState(0)
+  const [operandos, setOperandos] = useState('0')
+  const [operador, setOperador] = useState('')
+
   const botoes = []
   for (let i = 9; i >= 0; i--) botoes.push(i)
   botoes.push('CE')
@@ -54,12 +59,35 @@ export default function App() {
   })
 
   function handleButton(e) {
+    if (e == 'CE') setOperandos('0') // limpar o display
+    else if (e == '=') calcular() // calcula o resultado
+    else setOperandos(operandos + e) // gravando os operandos
   }
 
+  function handleButtonOperador(e) {
+    setOperador(e) // grava o operador
+    setMemoria(Number(operandos)) // grava o operando em memoria
+    setOperandos('0') // limpa o display
+  }
+
+  function calcular() {
+    let resultado = 0
+    if (operador === '+') resultado = Number(memoria) + Number(operandos)
+    else if (operador === '-') resultado = Number(memoria) - Number(operandos)
+    else if (operador === '*') resultado = Number(memoria) * Number(operandos)
+    else resultado = Number(memoria) / Number(operandos)
+    setOperandos(String(resultado))
+    setMemoria(0)
+    setOperador()
+  }
 
   return (
     <View style={estilos.container}>
-      <TextInput style={estilos.input} />
+      <TextInput
+        style={estilos.input}
+        readOnly
+        value={operandos}
+      />
       <View style={estilos.teclado}>
         <View style={estilos.containerBotoes}>
           {botoes.map((el, ix) =>
@@ -74,7 +102,11 @@ export default function App() {
         </View>
         <View style={estilos.containerOperadores}>
           {operadores.map((el, ix) =>
-            <TouchableOpacity key={ix} style={estilos.botao}>
+            <TouchableOpacity
+              key={ix}
+              style={estilos.botao}
+              onPress={() => handleButtonOperador(el)}
+            >
               <Text style={estilos.textoBotao}>{el}</Text>
             </TouchableOpacity>
           )}
