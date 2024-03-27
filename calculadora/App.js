@@ -1,16 +1,21 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 
 export default function App() {
-  const [memoria, setMemoria] = useState(0)
-  const [operandos, setOperandos] = useState('0')
-  const [operador, setOperador] = useState('')
+  const [botoes, setBotoes] = useState([])
+  const [operadores, setOperadores] = useState([])
+  const [memoria, setMemoria] = useState([0, 0, undefined])
 
-  const botoes = []
-  for (let i = 9; i >= 0; i--) botoes.push(i)
-  botoes.push('CE')
-  botoes.push('=')
-  const operadores = ['+', '-', '*', '/']
+  useEffect(() => {
+    // cria os botoes
+    let _botoes = []
+    for (let i = 9; i >= 0; i--) _botoes.push(i)
+    _botoes.push('CE')
+    _botoes.push('=')
+    setBotoes(_botoes)
+    // cria os operadores
+    setOperadores(['+', '-', '*', '/'])
+  }, [])
 
   const estilos = StyleSheet.create({
     container: {
@@ -59,34 +64,38 @@ export default function App() {
   })
 
   function handleButton(e) {
-    if (e == 'CE') setOperandos('0') // limpar o display
-    else if (e == '=') calcular() // calcula o resultado
-    else setOperandos(operandos + e) // gravando os operandos
-  }
+    let _memoria = [...memoria] //recebe do estado para variavel local
 
-  function handleButtonOperador(e) {
-    setOperador(e) // grava o operador
-    setMemoria(Number(operandos)) // grava o operando em memoria
-    setOperandos('0') // limpa o display
+    if (e == 'CE') _memoria[0] = 0
+    else if (['+', '-', '*', '/'].includes(e)) {
+      _memoria[1] = _memoria[0]
+      _memoria[0] = 0
+      _memoria[2] = e
+    }
+    else if (e === '=') {
+      _memoria[0] = calcular()
+      _memoria[1] = 0
+      _memoria[2] = undefined
+    }
+    else _memoria[0] = String(_memoria[0]) === '0' ? e : String(_memoria[0]) + e
+
+    setMemoria(_memoria)
   }
 
   function calcular() {
-    let resultado = 0
-    if (operador === '+') resultado = Number(memoria) + Number(operandos)
-    else if (operador === '-') resultado = Number(memoria) - Number(operandos)
-    else if (operador === '*') resultado = Number(memoria) * Number(operandos)
-    else resultado = Number(memoria) / Number(operandos)
-    setOperandos(String(resultado))
-    setMemoria(0)
-    setOperador()
+    if (memoria[2] === '+') return Number(memoria[1]) + Number(memoria[0])
+    else if (memoria[2] === '-') return Number(memoria[1]) - Number(memoria[0])
+    else if (memoria[2] === '*') return Number(memoria[1]) * Number(memoria[0])
+    return Number(memoria[1]) / Number(memoria[0])
   }
+
 
   return (
     <View style={estilos.container}>
       <TextInput
         style={estilos.input}
         readOnly
-        value={operandos}
+        value={String(memoria[0])}
       />
       <View style={estilos.teclado}>
         <View style={estilos.containerBotoes}>
@@ -105,7 +114,7 @@ export default function App() {
             <TouchableOpacity
               key={ix}
               style={estilos.botao}
-              onPress={() => handleButtonOperador(el)}
+              onPress={() => handleButton(el)}
             >
               <Text style={estilos.textoBotao}>{el}</Text>
             </TouchableOpacity>
