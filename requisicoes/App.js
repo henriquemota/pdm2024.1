@@ -4,6 +4,7 @@ import { PaperProvider } from 'react-native-paper'
 
 // Views
 import Home from './src/views/Home'
+import Mapa from './src/views/Mapa'
 
 const Nav = createNativeStackNavigator()
 
@@ -17,7 +18,10 @@ export default function App() {
             name="Home"
             component={Home}
           />
-          {/* <Nav.Screen name="Settings" component={SettingsScreen} /> */}
+          <Nav.Screen
+            name="Mapa"
+            component={Mapa}
+          />
         </Nav.Navigator>
       </NavigationContainer>
     </PaperProvider>
