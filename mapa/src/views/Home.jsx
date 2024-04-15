@@ -1,29 +1,22 @@
 import { useNavigation } from '@react-navigation/native'
-import axios from 'axios'
 import React, { useState } from 'react'
 import { View } from 'react-native'
 import { ActivityIndicator, Button, Card, Text, TextInput } from 'react-native-paper'
+import useCEP from '../hooks/useCEP'
 
 const Home = () => {
   const [loading, setLoading] = useState(false)
   const [cep, setCep] = useState('')
   const [address, setAddress] = useState(undefined)
   const { navigate } = useNavigation()
+  const { getCEP } = useCEP()
 
   const getAddress = () => {
     setLoading(true)
-    axios
-      .get(`https://cep.awesomeapi.com.br/json/${cep}`)
-      .then(({ data }) => {
-        const { address_name, address_type, city, district, lat, lng, state } = data
-        setAddress({ address_name, address_type, city, district, lat, lng, state })
-      })
-      .catch((p) => {
-        setAddress(undefined)
-      })
-      .finally(() => {
-        setLoading(false)
-      })
+    getCEP(cep)
+      .then(setAddress)
+      .catch(setAddress)
+      .finally(() => setLoading(false))
   }
 
   return (
@@ -34,6 +27,7 @@ const Home = () => {
           <TextInput
             label='CEP'
             keyboardType='number-pad'
+            value={cep}
             onChangeText={setCep}
           />
         </Card.Content>
