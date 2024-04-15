@@ -6,62 +6,61 @@ import { ActivityIndicator, Button, Card, Text, TextInput } from 'react-native-p
 
 const Home = () => {
   const [loading, setLoading] = useState(false)
-  const [cep, setCEP] = useState('')
+  const [cep, setCep] = useState('')
   const [address, setAddress] = useState(undefined)
   const { navigate } = useNavigation()
 
-  const handleCEP = () => {
+  const getAddress = () => {
     setLoading(true)
     axios
-      .get('https://cep.awesomeapi.com.br/json/' + cep)
+      .get(`https://cep.awesomeapi.com.br/json/${cep}`)
       .then(({ data }) => {
-        const { address, city, lat, lng, district, state } = data
-        setAddress({ address, city, lat, lng, district, state })
+        const { address_name, address_type, city, district, lat, lng, state } = data
+        setAddress({ address_name, address_type, city, district, lat, lng, state })
       })
-      .catch((param) => {
-        console.log('deu ruim', param)
+      .catch((p) => {
         setAddress(undefined)
       })
-      .finally(() => setLoading(false))
+      .finally(() => {
+        setLoading(false)
+      })
   }
 
   return (
-    <View style={{ padding: 8 }}>
+    <View style={{ flex: 1, padding: 8 }}>
       <ActivityIndicator animating={loading} />
       <Card>
-        <Card.Title title="Informe o CEP para pesquisar" />
         <Card.Content>
           <TextInput
-            label="Informe o CEP"
+            label='CEP'
             keyboardType='number-pad'
-            onChangeText={setCEP}
+            onChangeText={setCep}
           />
         </Card.Content>
         <Card.Actions>
-          <Button
-            onPress={handleCEP}
-          >
+          <Button onPress={getAddress}>
             Pesquisar
           </Button>
         </Card.Actions>
       </Card>
+
       {address &&
-        <Card style={{ marginTop: 16 }}>
+        <Card style={{ marginTop: 32 }}>
           <Card.Title title="Endereço" />
           <Card.Content>
-            <Text>Endereço: {address?.address}</Text>
-            <Text>Bairro: {address?.district}</Text>
-            <Text>Cidade / Estado: {address?.city} / {address?.state}</Text>
+            <Text>Endereço: {address.address_type} {address.address_name}</Text>
+            <Text>Bairro: {address.district}</Text>
+            <Text>Cidade/Estado: {address.city} / {address.state}</Text>
+            <Text>lat/lng: {address.lat}/{address.lng}</Text>
           </Card.Content>
           <Card.Actions>
-            <Button
-              onPress={() => navigate('Mapa', { ...address })}
-            >
+            <Button onPress={() => navigate('Mapa', { ...address })}>
               Ver no mapa
             </Button>
           </Card.Actions>
         </Card>
       }
+
     </View>
   )
 }
