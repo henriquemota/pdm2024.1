@@ -1,6 +1,6 @@
 import { addDoc, collection, getDocs } from 'firebase/firestore'
 import React, { useState } from 'react'
-import { View } from 'react-native'
+import { ScrollView, View } from 'react-native'
 import { ActivityIndicator, Button, Card, DataTable, TextInput } from 'react-native-paper'
 import { db } from '../services/firebase'
 
@@ -30,35 +30,40 @@ const Home = () => {
 
   return (
     <View style={{ padding: 8 }}>
-      <ActivityIndicator animating={loading} />
-      <Card>
-        <Card.Content>
-          <TextInput label='informe sua atividade' value={todo} onChangeText={settodo} />
-        </Card.Content>
-        <Card.Actions>
-          <Button onPress={addTodo}>
-            Inserir
-          </Button>
-          <Button onPress={readTodos}>
-            Ler dados
-          </Button>
-        </Card.Actions>
-      </Card>
-      <Card style={{ marginTop: 16 }}>
-        <Card.Content>
-          <DataTable>
-            <DataTable.Header>
-              <DataTable.Title>Tarefa</DataTable.Title>
-            </DataTable.Header>
-            {list.map((el, ix) =>
-              <DataTable.Row key={ix}>
-                <DataTable.Cell>{el.tarefa}</DataTable.Cell>
-              </DataTable.Row>
-            )}
-          </DataTable>
-        </Card.Content>
-      </Card>
-
+      <ScrollView>
+        <ActivityIndicator animating={loading} />
+        <Card>
+          <Card.Content>
+            <TextInput label='informe sua atividade' value={todo} onChangeText={settodo} />
+          </Card.Content>
+          <Card.Actions>
+            <Button onPress={addTodo}>
+              Inserir
+            </Button>
+            <Button onPress={readTodos}>
+              Ler dados
+            </Button>
+          </Card.Actions>
+        </Card>
+        <Card style={{ marginTop: 16 }}>
+          <Card.Content>
+            <DataTable>
+              <DataTable.Header>
+                <DataTable.Title>Tarefa</DataTable.Title>
+                <DataTable.Title>Tarefa</DataTable.Title>
+                <DataTable.Title>Tarefa</DataTable.Title>
+              </DataTable.Header>
+              {list.map((el, ix) =>
+                <DataTable.Row key={ix}>
+                  <DataTable.Cell>{el.tarefa}</DataTable.Cell>
+                  <DataTable.Cell>{el.tarefa}</DataTable.Cell>
+                  <DataTable.Cell>{el.tarefa}</DataTable.Cell>
+                </DataTable.Row>
+              )}
+            </DataTable>
+          </Card.Content>
+        </Card>
+      </ScrollView>
     </View>
   )
 }
