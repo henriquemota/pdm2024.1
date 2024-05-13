@@ -1,14 +1,18 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
+import { useNavigation } from '@react-navigation/native'
 import { addDoc, collection, getDocs } from 'firebase/firestore'
 import React, { useState } from 'react'
 import { ScrollView, View } from 'react-native'
 import { ActivityIndicator, Button, Card, DataTable, TextInput } from 'react-native-paper'
 import { db } from '../services/firebase'
 
+
 const Home = () => {
   const [list, setlist] = useState([])
   const [loading, setloading] = useState(false)
   const [todo, settodo] = useState('')
   const minha_colecao = collection(db, "tasks")
+  const { navigate } = useNavigation()
 
   const addTodo = () => {
     setloading(true)
@@ -30,6 +34,12 @@ const Home = () => {
 
   return (
     <View style={{ padding: 8 }}>
+      <Button mode='contained' onPress={() => {
+        AsyncStorage.removeItem("user")
+          .then(() => navigate('Auth'))
+      }}>
+        Sair
+      </Button>
       <ScrollView>
         <ActivityIndicator animating={loading} />
         <Card>

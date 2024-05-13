@@ -1,10 +1,11 @@
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useNavigation } from '@react-navigation/native'
 import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword
 } from 'firebase/auth'
 import React, { useState } from 'react'
-import { View } from 'react-native'
+import { Alert, View } from 'react-native'
 import { Button, TextInput } from 'react-native-paper'
 import { auth } from '../services/firebase'
 
@@ -18,12 +19,12 @@ const Auth = () => {
     createUserWithEmailAndPassword(auth, user.login, user.senha)
       .then((userCredential) => {
         const user = userCredential.user
-        console.log(user)
+        Alert.alert('Sucesso', 'Usuário criado com sucesso')
       })
       .catch((error) => {
         const errorCode = error.code
         const errorMessage = error.message
-        console.log('erro', errorMessage)
+        Alert.alert('Erro', errorMessage)
       })
       .finally(() => setloading(false))
 
@@ -32,14 +33,15 @@ const Auth = () => {
   const signin = () => {
     setloading(true)
     signInWithEmailAndPassword(auth, user.login, user.senha)
-      .then((userCredential) => {
+      .then(async (userCredential) => {
         const user = userCredential.user
+        await AsyncStorage.setItem('user', JSON.stringify(user))
         navigate("Home")
       })
       .catch((error) => {
-        console.log("erro")
         const errorCode = error.code
         const errorMessage = error.message
+        Alert.alert('Erro', errorMessage)
       })
       .finally(() => setloading(false))
   }
