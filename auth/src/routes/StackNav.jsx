@@ -12,7 +12,6 @@ const StackNav = () => {
   const [initial, seetinitial] = useState(false)
   useEffect(() => {
     AsyncStorage.getItem('user').then(value => {
-      console.log(JSON.parse(value).email)
       seetinitial(value)
     })
   }, [])
