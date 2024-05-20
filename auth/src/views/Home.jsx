@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native'
 import { addDoc, collection, getDocs } from 'firebase/firestore'
 import React, { useState } from 'react'
 import { ScrollView, View } from 'react-native'
-import { ActivityIndicator, Button, Card, DataTable, TextInput } from 'react-native-paper'
+import { Button, Card, DataTable, TextInput } from 'react-native-paper'
 import { db } from '../services/firebase'
 
 
@@ -34,24 +34,30 @@ const Home = () => {
 
   return (
     <View style={{ padding: 8 }}>
-      <Button mode='contained' onPress={() => {
-        AsyncStorage.removeItem("user")
-          .then(() => navigate('Auth'))
-      }}>
-        Sair
-      </Button>
       <ScrollView>
-        <ActivityIndicator animating={loading} />
         <Card>
           <Card.Content>
             <TextInput label='informe sua atividade' value={todo} onChangeText={settodo} />
           </Card.Content>
           <Card.Actions>
-            <Button onPress={addTodo}>
-              Inserir
+            <Button mode='contained' onPress={addTodo} loading={loading}>
+              +
             </Button>
-            <Button onPress={readTodos}>
-              Ler dados
+            <Button mode='contained' onPress={readTodos} loading={loading}>
+              R
+            </Button>
+            <Button mode='contained' onPress={() => navigate('Todo')}>
+              SQLite
+            </Button>
+            <Button mode='contained' onPress={() => navigate('Camera')}>
+              Camera
+            </Button>
+            <Button mode='contained' onPress={() => {
+              AsyncStorage
+                .removeItem("user")
+                .then(() => navigate('Auth'))
+            }}>
+              Sair
             </Button>
           </Card.Actions>
         </Card>

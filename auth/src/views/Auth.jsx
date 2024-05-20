@@ -47,7 +47,7 @@ const Auth = () => {
   }
 
   return (
-    <View style={{ gap: 4, padding: 4 }}>
+    <View style={{ gap: 4, padding: 4, flex: 1, justifyContent: 'center' }}>
       <TextInput
         label='Email'
         keyboardType='email-address'
@@ -58,12 +58,15 @@ const Auth = () => {
         secureTextEntry
         onChangeText={t => setuser({ ...user, senha: t })}
       />
-      <Button mode='contained' onPress={create} loading={loading}>
-        Criar usuário
-      </Button>
-      <Button mode='contained' onPress={signin} loading={loading}>
-        Login
-      </Button>
+      <View style={{ flexDirection: 'row', justifyContent: 'center', marginVertical: 16, gap: 8 }}>
+        <Button mode='contained' onPress={create} loading={loading}>
+          Criar usuário
+        </Button>
+        <Button mode='contained' onPress={signin} loading={loading}>
+          Login
+        </Button>
+
+      </View>
     </View>
   )
 }
